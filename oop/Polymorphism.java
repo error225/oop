@@ -1,94 +1,104 @@
-// Title: Polymorphism 
+import java.util.Scanner;
 
-// Aim: Identify commonalities and differences between Publication, Book and Magazine classes. Title, Price, 
-// Copies are common instance variables and saleCopy is common method. The differences are, Book class has 
-// author and orderCopies(). Magazine Class has orderQty. Write a program to find how many copies of the given 
-// books are ordered and display total sale of publication.
 
 class Publication {
-    public String title;
-    public double price;
-    public int copies;
+    String title;
+    int price, copies;
 
-    public Publication(String title, double price, int copies) {
+    
+    public Publication(String title, int price, int copies) {
         this.title = title;
         this.price = price;
         this.copies = copies;
     }
 
-    public double saleCopy(int numberOfCopies) {
-        return price * numberOfCopies;
-    }
-
-    public void displayDetails() {
-        System.out.println("Title: " + title);
-        System.out.println("Price: " + price);
-        System.out.println("Copies: " + copies);
+    
+    void saleCopy() {
+        System.out.println("Total Sale of " + title + " : " + (price * copies));
     }
 }
 
-class Book extends Publication {
-    private String author;
 
-    public Book(String title, double price, int copies, String author) {
+class Book extends Publication {
+    String author;
+
+    
+    public Book(String title, int price, int copies, String author) {
         super(title, price, copies);
         this.author = author;
     }
 
-    public void orderCopies(int numberOfCopies) {
-        this.copies += numberOfCopies;
-        System.out.println(numberOfCopies + " copies of the book ordered.");
+    
+    @Override
+    void saleCopy() {
+        System.out.println("Total Sale of Book '" + title + "' by " + author + ": " + (price * copies));
     }
 
-    @Override
-    public void displayDetails() {
-        super.displayDetails();
-        System.out.println("Author: " + author);
+    // Method to order additional copies of the book
+    void orderCopies() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter number of copies ordered for the book: ");
+        copies = sc.nextInt();
     }
 }
 
+// Magazine class extending Publication, implementing saleCopy() and orderQty()
 class Magazine extends Publication {
-    private int orderQty;
 
-    public Magazine(String title, double price, int copies, int orderQty) {
+    // Constructor for Magazine-specific properties
+    public Magazine(String title, int price, int copies) {
         super(title, price, copies);
-        this.orderQty = orderQty;
     }
 
-    public void orderQty(int quantity) {
-        this.orderQty += quantity;
-        this.copies += quantity;
-        System.out.println(quantity + " copies of the magazine ordered.");
-    }
-
+    // Override saleCopy() for Magazine-specific logic
     @Override
-    public void displayDetails() {
-        super.displayDetails();
-        System.out.println("Order Quantity: " + orderQty);
+    void saleCopy() {
+        System.out.println("Total Sale of Magazine '" + title + "': " + (price * copies));
+    }
+
+    // Method to order additional copies of the magazine
+    void orderQty() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter number of copies ordered for the magazine: ");
+        copies = sc.nextInt();
     }
 }
 
-public class Polymorphism {
+public class Store {
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
         
-        Book book = new Book("Java Programming", 500.0, 50, "John Doe");
-        Magazine magazine = new Magazine("Tech Monthly", 150.0, 30, 10);
+        // Test the Book class
+        System.out.println("Enter details for the Book: ");
+        System.out.print("Title: ");
+        String bookTitle = sc.nextLine();
+        System.out.print("Price: ");
+        int bookPrice = sc.nextInt();
+        System.out.print("Copies: ");
+        int bookCopies = sc.nextInt();
+        sc.nextLine();  // Consume newline
+        System.out.print("Author: ");
+        String bookAuthor = sc.nextLine();
 
-        book.displayDetails();
-        System.out.println("Sale of 10 copies: Rs." + book.saleCopy(10));
-        book.orderCopies(20);
-        System.out.println("Total copies after order: " + book.copies);
+        // Create a Book object and order copies
+        Book book = new Book(bookTitle, bookPrice, bookCopies, bookAuthor);
+        book.orderCopies();  // Order more copies for the book
+        book.saleCopy();     // Calculate and display the total sale for the book
 
-        System.out.println();
+        // Test the Magazine class
+        System.out.println("\nEnter details for the Magazine: ");
+        System.out.print("Title: ");
+        String magazineTitle = sc.nextLine();
+        System.out.print("Price: ");
+        int magazinePrice = sc.nextInt();
+        System.out.print("Copies: ");
+        int magazineCopies = sc.nextInt();
 
-        magazine.displayDetails();
-        System.out.println("Sale of 5 copies: Rs." + magazine.saleCopy(5));
-        magazine.orderQty(15);
-        System.out.println("Total copies after order: " + magazine.copies);
-
-        System.out.println();
-
-        double totalSale = book.saleCopy(book.copies) + magazine.saleCopy(magazine.copies);
-        System.out.println("Total Sale of Publication: Rs." + totalSale);
+        // Create a Magazine object and order copies
+        Magazine magazine = new Magazine(magazineTitle, magazinePrice, magazineCopies);
+        magazine.orderQty();  // Order more copies for the magazine
+        magazine.saleCopy();  // Calculate and display the total sale for the magazine
+        
+        sc.close(); // Close the scanner object
     }
 }
