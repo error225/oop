@@ -1,32 +1,34 @@
 import java.util.Scanner;
 
-public class ExceptionHandle {
+public class ExceptionHandlingExample {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            System.out.print("Enter Num1: ");
-            String input1 = scanner.nextLine();
-            int num1 = Integer.parseInt(input1);
+            // Input for Num1 and Num2
+            System.out.print("Enter first number (Num1): ");
+            String num1Input = scanner.nextLine();
+            System.out.print("Enter second number (Num2): ");
+            String num2Input = scanner.nextLine();
 
-            System.out.print("Enter Num2: ");
-            String input2 = scanner.nextLine();
-            int num2 = Integer.parseInt(input2);
+            // Converting String inputs to integers
+            int num1 = Integer.parseInt(num1Input);
+            int num2 = Integer.parseInt(num2Input);
 
-            if (num2 == 0) {
-                throw new ArithmeticException("Cannot divide by zero");
-            }
+            // Perform division and handle possible exceptions
+            System.out.println("Division Result: " + (num1 / num2));
 
-            int result = num1 / num2;
-            System.out.println("Division result: " + result);
-        }
-         catch (NumberFormatException e) {
-            System.out.println("Error: Invalid input. Please enter valid integers.");
-        }
-         catch (ArithmeticException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-         catch (Exception e) {
+            // Simulating an ArrayIndexOutOfBoundsException
+            int[] array = new int[2];
+            System.out.println(array[3]); // This will throw ArrayIndexOutOfBoundsException
+
+        } catch (ArithmeticException e) {
+            System.out.println("Arithmetic Exception: " + e.getMessage());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Array Index Out of Bounds Exception: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Number Format Exception: Please enter valid integers.");
+        } catch (Exception e) {
             System.out.println("An unexpected error occurred: " + e.getMessage());
         } finally {
             scanner.close();
